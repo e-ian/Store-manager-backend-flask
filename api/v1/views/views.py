@@ -43,3 +43,19 @@ def get_all_products():
             'product_list':all_products
         }
         return make_response(jsonify(response), 200)
+
+@app.route('/ap1/v1/products/<int:product_id>', methods=['GET'])
+def get_a_product(product_id):
+    """
+    get a product by product_id
+    """
+    
+    get_product = product_store.get_single_product(product_id)
+    if get_product:
+        response = {
+            'product':get_product
+        }
+        return make_response(jsonify(response), 200)
+    else:
+        return make_response(jsonify({'response': 'not found'})), 404
+
