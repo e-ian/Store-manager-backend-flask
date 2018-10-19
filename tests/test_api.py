@@ -69,4 +69,13 @@ class TestApi(unittest.TestCase):
         with self.client as client:
             response = client.get("/api/v1/products")
             self.assertEqual(response.status_code, 200)
+
+    def test_get_a_product(self):
+        """
+         tests if a single product cannot be fetched
+        """
+        
+        with self.client as client:                     
+            response = client.get("/api/v1/products/1")             
+            self.assertEqual(response.status_code, 404) 
   
