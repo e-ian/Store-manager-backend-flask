@@ -94,3 +94,19 @@ def get_sale_orders():
             'sale_order_list':all_sale_orders
         }
         return make_response(jsonify(response), 200)
+
+@app.route('/api/v1/sales/<int:sale_id>', methods=['GET'] )
+def get_a_sale_order(sale_id):
+    """
+    get a specific sale order
+    """
+    get_sale_order = sales_store.fetch_specific_sale_record(sale_id)
+
+    if get_sale_order:
+        message= {
+            'sale':get_sale_order
+            }
+        return make_response(jsonify(message), 200)
+
+    else:
+        return make_response(jsonify({'message': 'not found'})), 404
