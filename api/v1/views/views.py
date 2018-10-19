@@ -5,8 +5,10 @@ module
 from api.v1 import app
 from flask import jsonify, request, make_response
 from api.v1.models.products import Products
+from api.v1.models.sales import Sales
 
 product_store = Products()
+sales_store = Sales()
 
 
 @app.route('/api/v1/products', methods=['POST'])
@@ -59,3 +61,21 @@ def get_a_product(product_id):
     else:
         return make_response(jsonify({'response': 'not found'})), 404
 
+@app.route('/api/v1/sales', methods=['POST'])
+def post_sale_order():
+    """
+    adds a sale order
+    """
+    data = request.get_json(force=True)
+    product_name = data['product_name']
+    price = data['price']
+    quantity = data['quantity']
+    create= sales_store.add_sale_order(product_name, price, quantity)
+
+    if create:
+        message = {
+            'message': 'sale order added successfully'
+        }
+        return make_response(jsonify(message), 201)
+    else:
+        return make_response(jsonify(dict(message= 'sale order not added.')), 401)
