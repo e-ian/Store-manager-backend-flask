@@ -60,5 +60,13 @@ class TestApi(unittest.TestCase):
         with self.client as client:
             response = client.post("/api/v1/products", data = json.dumps(product), content_type='application/json')
             self.assertEqual(response.status_code, 201)
-                    
+    
+    def test_get_products(self):
+        """
+        tests if all products can be fetched
+        test asserts that response is 200
+        """       
+        with self.client as client:
+            response = client.get("/api/v1/products")
+            self.assertEqual(response.status_code, 200)
   
