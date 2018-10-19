@@ -26,3 +26,8 @@ class Sales():
 
     def fetch_sale_orders(self):        
         return self.sales_orders
+
+    def fetch_specific_sale_record(self, sale_id):
+        for sale_order in self.sales_orders:
+            if sale_order['sale_id'] == sale_id:
+                return sale_order
