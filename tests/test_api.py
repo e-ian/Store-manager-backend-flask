@@ -7,6 +7,7 @@ import unittest
 import json
 from config import TestingConfig
 from api.v1.models.products import Products
+from api.v1.models.sales import Sales
 
 
 
@@ -108,5 +109,8 @@ class TestApi(unittest.TestCase):
             response = client.get("/api/v1/sales/1")
             self.assertEqual(response.status_code, 404)
 
+    def teardown(self):
+        self.sales.clear()
+        self.products.clear()
     
   
