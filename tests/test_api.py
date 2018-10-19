@@ -100,5 +100,13 @@ class TestApi(unittest.TestCase):
             response = client.get("/api/v1/sales")
             self.assertEqual(response.status_code, 200)
 
+    def test_get_a_sale_order(self):
+        """
+        tests if a specific sale order cannot be returned
+        """
+        with self.client as client:
+            response = client.get("/api/v1/sales/1")
+            self.assertEqual(response.status_code, 404)
+
     
   
