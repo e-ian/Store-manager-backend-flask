@@ -60,6 +60,9 @@ def get_a_product(product_id):
         return make_response(jsonify(response), 200)
     else:
         return make_response(jsonify({'response': 'not found'})), 404
+    """
+    handling sales orders
+    """
 
 @app.route('/api/v1/sales', methods=['POST'])
 def post_sale_order():
@@ -79,3 +82,15 @@ def post_sale_order():
         return make_response(jsonify(message), 201)
     else:
         return make_response(jsonify(dict(message= 'sale order not added.')), 401)
+    
+@app.route('/api/v1/sales', methods=['GET'])
+def get_sale_orders():
+    """
+    get all sale orders
+    """
+    if request.method == 'GET':
+        all_sale_orders = sales_store.fetch_sale_orders()
+        response = {
+            'sale_order_list':all_sale_orders
+        }
+        return make_response(jsonify(response), 200)
