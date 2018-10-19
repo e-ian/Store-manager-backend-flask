@@ -23,3 +23,6 @@ class Sales():
         }
 
         return make_response(jsonify(message), 201)
+
+    def fetch_sale_orders(self):        
+        return self.sales_orders
