@@ -10,7 +10,7 @@ install:
   - pip install pytest
 
 script:
-  - py.test --cov=api tests/
+  - pytest --cov=api tests/
 
 after_success:
 - coveralls
