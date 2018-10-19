@@ -31,3 +31,15 @@ def post_product():
         return make_response(jsonify(message), 201)
     else:
         return make_response(jsonify(dict(message= 'Not added.')), 401)
+
+@app.route('/api/v1/products', methods=['GET'])
+def get_all_products():
+    """
+    get all products
+    """
+    if request.method == 'GET':
+        all_products = product_store.get_products()
+        response = {
+            'product_list':all_products
+        }
+        return make_response(jsonify(response), 200)
