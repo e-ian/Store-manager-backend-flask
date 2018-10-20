@@ -63,11 +63,11 @@ To install all required dependencies for the project, use the command:
 
 ## Interface
 
-*Store attendant can search and add products to buyer's cart.
-*Store attendant can see his/her sale records but can’t modify them.
-*App should show available products, quantity and price.
-*Store owner can see sales and can filter by attendants.
-*Store owner can add, modify and delete products.
+* Store attendant can search and add products to buyer's cart.
+* Store attendant can see his/her sale records but can’t modify them.
+* App should show available products, quantity and price.
+* Store owner can see sales and can filter by attendants.
+* Store owner can add, modify and delete products.
 
 # API Endpoints
 
