@@ -15,12 +15,12 @@ These instructions will help you set and run the application on your local machi
 
 The following are required to enable you get started!
 
-*Serverside Framework: Flask Python Framework
-*Testing Framework: Pytest
-*API development environment: Postman
-*GIT
-*IDE/Text editor(Vs Code preferred)
-*Python 3.6
+* Serverside Framework: Flask Python Framework
+* Testing Framework: Pytest
+* API development environment: Postman
+* GIT
+* IDE/Text editor(Vs Code preferred)
+* Python 3.6
 
 # Project links:
 
