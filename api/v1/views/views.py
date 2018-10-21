@@ -7,9 +7,8 @@ from flask import jsonify, request, make_response
 from api.v1.models.products import Products
 from api.v1.models.sales import Sales
 
-product_store = Products()
-sales_store = Sales()
 
+sales_store = Sales()
 
 @app.route('/api/v1/products', methods=['POST'])
 def post_product():
@@ -18,21 +17,24 @@ def post_product():
     """
 
     form_data = request.get_json(force=True)
-    product_name = form_data['product_name']
-    category = form_data['category']
-    price = form_data['price']
-    quantity = form_data['quantity']
-    minimum_quantity = form_data['minimum_quantity']
-    add = product_store.add_product(product_name, category, price, quantity, minimum_quantity)
-
-    if add:
+    product = {
+        'product_id': Products.len_of_dict(),
+        'product_name': form_data['product_name'],
+        'category' : form_data['category'],
+        'price' : form_data['price'],
+        'quantity' : form_data['quantity'],
+        'minimum_quantity' : form_data['minimum_quantity']
+    }  
+   
+    product_add = Products.add_product(product)
+    if product_add:
         message = {
             'message': 'Product successfully added'
         }
 
         return make_response(jsonify(message), 201)
     else:
-        return make_response(jsonify(dict(message= 'Not added.')), 400)
+        return make_response(jsonify(dict(message= 'No product added')), 400)
 
 @app.route('/api/v1/products', methods=['GET'])
 def get_all_products():
@@ -40,19 +42,18 @@ def get_all_products():
     get all products
     """
     if request.method == 'GET':
-        all_products = product_store.get_products()
+        all_products = Products.get_products()
         response = {
             'product_list':all_products
         }
         return make_response(jsonify(response), 200)
 
-@app.route('/ap1/v1/products/<int:product_id>', methods=['GET'])
+@app.route('/api/v1/products/<int:product_id>', methods=['GET'])
 def get_a_product(product_id):
     """
     get a product by product_id
-    """
-    
-    get_product = product_store.get_single_product(product_id)
+    """    
+    get_product = Products.get_single_product(product_id)
     if get_product:
         response = {
             'product':get_product
@@ -60,6 +61,7 @@ def get_a_product(product_id):
         return make_response(jsonify(response), 200)
     else:
         return make_response(jsonify({'response': 'not found'}), 404)
+
     """
     handling sales orders
     """
@@ -81,7 +83,7 @@ def post_sale_order():
         }
         return make_response(jsonify(message), 201)
     else:
-        return make_response(jsonify({'message': "sale order added successfully"}), 401)
+        return make_response(jsonify({'message': "No sale order added"}), 400)
     
 @app.route('/api/v1/sales', methods=['GET'])
 def get_sale_orders():
@@ -109,4 +111,4 @@ def get_a_sale_order(sale_id):
         return make_response(jsonify(message), 200)
 
     else:
-        return make_response(jsonify({'message': 'not found'})), 404
+        return make_response(jsonify({'message': 'not found'}), 404)
