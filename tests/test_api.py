@@ -42,7 +42,7 @@ class TestApi(unittest.TestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIn('Product successfully added', response_json['message'])
     
-    # def test_product_add_unaccepted(self):
+    # def test_product_empty(self):
     #     """
     #     method to test if post method returns invalid if no product is entered
         
@@ -122,6 +122,9 @@ class TestApi(unittest.TestCase):
             client.post("/api/v1/sales", json=dict(product_name='skirt', price='30000', quantity='10' ))
             response = client.get("api/v1/sales/10")
             self.assertEqual(response.status_code, 404)
+
+if __name__ == '__main__':
+    unittest.main()
 
 
     
