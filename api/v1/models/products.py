@@ -13,12 +13,7 @@ class Products:
         self.price = price
         self.quantity = quantity
         self.minimum_quantity = minimum_quantity
-
-    # def json_format(self):
-    #     """
-    #     returns data in json format
-    #     """
-    #     return self.__dict__
+   
     @classmethod
     def len_of_dict(cls):
         return len(cls.product_list) + 1
@@ -40,11 +35,12 @@ class Products:
             if product['product_id'] == product_id:
                 return product
       
-    def validate_post_input(self):
+    def validate_product_name_input(self):
+        
         if self.product_name.strip() == '':
-            return jsonify({'error': "product name cannot be an empty string"}), 400 
+            return jsonify({'error': "product name cannot be an empty string"}), 400
         if not self.product_name.isalpha():
-            return jsonify({'error': "product name should have alphabet letters only"}), 400         
+            return jsonify({'error': "product name should have alphabet letters only"}), 400                   
         if isinstance(self.price, str):
             return jsonify({'error': "price cannot be a string"}), 400
         if not isinstance(self.price, int):
@@ -59,8 +55,5 @@ class Products:
             return jsonify({'error': "input minimum quantity as integer"}), 400        
         if self.category.strip() == '':
             return jsonify({'error': "category cannot be an empty string"}), 400                   
-        return True
-    
-
-    
+        return True     
     
