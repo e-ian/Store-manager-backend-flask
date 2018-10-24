@@ -11,24 +11,27 @@ from api.v1.models.sales import Sales
 def post_product():
     """
     implements the post products api  
-    """     
-    form_data = request.get_json(force=True)
-    product = {
-        'product_id': Products.len_of_dict(),
-        'product_name': form_data['product_name'],
-        'category' : form_data['category'],
-        'price' : form_data['price'],
-        'quantity' : form_data['quantity'],
-        'minimum_quantity' : form_data['minimum_quantity']
-    }
-    valid=Products(product['product_name'], product['category'], product['price'], \
-    product['quantity'], product['minimum_quantity']).validate_post_input()
-    if valid==True:
-        product_add = Products.add_product(product)
-        if product_add:
-            return make_response(jsonify({"message": 'product added successfully'}), 201)
-    return valid    
-   
+    """ 
+    try:
+        form_data = request.get_json(force=True)
+        product = {
+            'product_id': Products.len_of_dict(),
+            'product_name': form_data['product_name'],
+            'category' : form_data['category'],
+            'price' : form_data['price'],
+            'quantity' : form_data['quantity'],
+            'minimum_quantity' : form_data['minimum_quantity']
+        }
+        valid=Products(product['product_name'], product['category'], product['price'], \
+        product['quantity'], product['minimum_quantity']).validate_product_name_input()
+        if valid==True:
+            product_add = Products.add_product(product)
+            if product_add:
+                return make_response(jsonify({"message": 'product added successfully'}), 201)
+        return valid  
+    except KeyError:
+        return jsonify({'error': "Invalid key fields"}), 400    
+
 @app.route('/api/v1/products', methods=['GET'])
 def get_all_products():
     """
@@ -54,27 +57,28 @@ def get_a_product(product_id):
         return make_response(jsonify(response), 200)
     else:
         return make_response(jsonify({'message': 'not found'}), 404)
-        # 404 not tested
+    
 @app.route('/api/v1/sales', methods=['POST'])
 def post_sale_order():
     """
     adds a sale order
     """
-    data = request.get_json(force=True)    
-    sale_order={
-        'sale_id': Sales.len_of_orders(),
-        'product_name': data['product_name'],
-        'price': data["price"],
-        'quantity': data["quantity"]
-    }
-    
-    receipt = Sales(sale_order['product_name'], sale_order['price'], sale_order['quantity']).validate_sale_order()
-    if receipt==True:  
-        create= Sales.add_sale_order(sale_order)
-        if create:     
-            return make_response(jsonify({'message': 'sale order added successfully'}), 201) 
-    return receipt  
-       
+    try:
+        data = request.get_json(force=True)   
+        sale_order={
+            "sale_id": Sales.len_of_orders(),
+            "product_name": data['product_name'],
+            "price": data["price"],
+            "quantity": data["quantity"]
+        }    
+        receipt = Sales(sale_order['product_name'], sale_order['price'], sale_order['quantity']).validate_sale_order()
+        if receipt==True:
+            create= Sales.add_sale_order(sale_order)
+            if create:     
+                return make_response(jsonify({'message': 'sale order added successfully'}), 201) 
+        return receipt  
+    except KeyError:
+        return jsonify({'error': "missing one/ more key fields"}), 400       
     
 @app.route('/api/v1/sales', methods=['GET'])
 def get_sale_orders():
@@ -94,6 +98,7 @@ def get_a_sale_order(sale_id):
     get a specific sale order
     """
     get_sale_order = Sales.fetch_specific_sale_record(sale_id)
+
     if get_sale_order:
         message= {
             'sale':get_sale_order
