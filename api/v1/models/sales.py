@@ -2,6 +2,7 @@
 defines sales class in models
 """
 from flask import Flask, jsonify, make_response, request
+import re
 class Sales:
     sale_orders = []
 
@@ -11,21 +12,14 @@ class Sales:
         self.price = price
         self.quantity = quantity
 
-    # def to_json_format(self):
-    #     """
-    #     returns data in json format
-    #     """
-    #     return self.__dict__
     @classmethod
     def len_of_orders(cls):
         return len(cls.sale_orders) + 1
 
     @classmethod
-    def add_sale_order(cls, sale):
-        """
-        class method to add a sale order to sale_order
-        """
-        cls.sale_orders.append(sale)
+    def add_sale_order(cls, sale_order):
+        """  class method to add a sale order to sale_order     """
+        cls.sale_orders.append(sale_order)
         return cls.sale_orders
 
     @classmethod
@@ -50,6 +44,6 @@ class Sales:
         if isinstance(self.quantity, str):
             return jsonify({'error': "quantity cannot be a string"}), 400
         if not isinstance(self.quantity, int):
-            return jsonify({'error': "input quantity as integer"}), 400
+            return jsonify({'error': "input quantity as integer"}), 400        
         return True
-    
+       
