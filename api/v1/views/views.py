@@ -26,7 +26,7 @@ def post_product():
         }
         valid = Products(product['product_name'], product['category'], product['price'], \
         product['quantity'], product['minimum_quantity']).validate_product_post_input()
-        if valid == True:
+        if valid is True:
             product_add = Products.add_product(product)
             if product_add:
                 return make_response(jsonify({"message": 'product added successfully'}), 201)
