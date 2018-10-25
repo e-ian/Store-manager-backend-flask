@@ -1,13 +1,12 @@
 """
 module test
 """
-from api.v1 import app
-from api.v1.views import views
 import unittest
 import json
-from config import TestingConfig
 from api.v1.models.products import Products
 from api.v1.models.sales import Sales
+from api.v1.views import views
+from api.v1 import app
 
 class TestApi(unittest.TestCase):
     """ class for unittesting the APIs """
@@ -15,50 +14,50 @@ class TestApi(unittest.TestCase):
         """ sets up instance of app for the tests
             creates client to run the tests
         """
-        # self.app = create_app(TestingConfig)
         self.client = app.test_client()
-    
+
     def test_add_product(self):
         """tests if a product has been added"""
         product = {"product_name" : "jeans",
-            "price" : 5000,
-            "category": "mens clothing",
-            "quantity": 10,
-            "minimum_quantity": 5}
-        
+                   "price" : 5000,
+                   "category": "mens clothing",
+                   "quantity": 10,
+                   "minimum_quantity": 5}
+
         with self.client as client:
-            response = client.post("/api/v1/products", data = json.dumps(product), content_type='application/json')            
+            response = client.post("/api/v1/products", data=json.dumps(product),\
+            content_type='application/json')
             self.assertEqual(response.status_code, 201)
-    
+
     def test_get_products(self):
-        """tests if all products can be fetched"""       
+        """tests if all products can be fetched"""
         with self.client as client:
             response = client.get("/api/v1/products")
             self.assertEqual(response.status_code, 200)
 
     def test_get_a_product(self):
-        """tests if a single product can be fetched"""        
-        with self.client as client:                     
-            response = client.get("/api/v1/products/1")             
+        """tests if a single product can be fetched"""
+        with self.client as client:
+            response = client.get("/api/v1/products/1")
             self.assertEqual(response.status_code, 200)
-    
+
     def test_product_not_found(self):
         """method to test if a product isnt returned by given product_id"""
         with self.client as client:
-            client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, category="mens clothing", quantity= 10 ,minimum_quantity=5))
-            client.post("api/v1/products", json=dict(product_name= "skirt", \
-            price=5000, category="womens clothing", quantity= 10 ,minimum_quantity=5))
+            client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, category="mens clothing", quantity=10, minimum_quantity=5))
+            client.post("api/v1/products", json=dict(product_name="skirt", \
+            price=5000, category="womens clothing", quantity=10, minimum_quantity=5))
             response = client.get("/api/v1/products/200")
             self.assertEqual(response.status_code, 404)
-    
+
     def test_post_sale_order(self):
         """tests if a sale order can be added"""
         with self.client as client:
             response = client.post("/api/v1/sales", json=dict(product_name='jeans',\
-            price=50000, quantity=3 ))            
-            self.assertEqual(response.status_code, 201)    
-    
+            price=50000, quantity=3))
+            self.assertEqual(response.status_code, 201)
+
     def test_get_sale_orders(self):
         """tests if all sales orders can be fetched"""
         with self.client as client:
@@ -85,123 +84,128 @@ class TestApi(unittest.TestCase):
     def test_product_not_empty_string(self):
         """tests if product posted is not an empty string"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= " ", \
-            price=5000, category="mens clothing", quantity= 10 ,minimum_quantity=5))
+            response = client.post("api/v1/products", json=dict(product_name=" ", \
+            price=5000, category="mens clothing", quantity=10, minimum_quantity=5))
             self.assertEqual(response.status_code, 400)
 
     def test_product_with_alphabet_only(self):
         """tests if product has alphabets only"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "123***", \
-            price=5000, category="mens clothing", quantity= 10 ,minimum_quantity=5))
+            response = client.post("api/v1/products", json=dict(product_name="123***", \
+            price=5000, category="mens clothing", quantity=10, minimum_quantity=5))
             self.assertEqual(response.status_code, 400)
 
     def test_price_not_string(self):
         """tests if price is not a string"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price="5000", category="mens clothing", quantity= 10 ,minimum_quantity=5))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price="5000", category="mens clothing", quantity=10, minimum_quantity=5))
             self.assertEqual(response.status_code, 400)
 
     def test_price_is_integer(self):
         """tests if price is an integer"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=3.5, category="mens clothing", quantity= 10 ,minimum_quantity=5))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=3.5, category="mens clothing", quantity=10, minimum_quantity=5))
             self.assertEqual(response.status_code, 400)
 
     def test_quantity_not_string(self):
         """tests if quantity is not a string"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, category="mens clothing", quantity= "ten" ,minimum_quantity=5))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, category="mens clothing", quantity="ten", minimum_quantity=5))
             self.assertEqual(response.status_code, 400)
-        
+
     def test_quantity_is_integer(self):
         """tests if quantity is not a string"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, category="mens clothing", quantity= 10.677 ,minimum_quantity=5))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, category="mens clothing", quantity=10.677, minimum_quantity=5))
             self.assertEqual(response.status_code, 400)
 
     def test_min_quantity_not_string(self):
         """tests if minimum_quantity is not a string"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, category="mens clothing", quantity= 10 ,minimum_quantity="five"))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, category="mens clothing", quantity=10, minimum_quantity="five"))
             self.assertEqual(response.status_code, 400)
 
     def test_min_quantity_integer(self):
         """tests if minimum quantity is an integer"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, category="mens clothing", quantity= 10 ,minimum_quantity= 6.8))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, category="mens clothing", quantity=10, minimum_quantity=6.8))
             self.assertEqual(response.status_code, 400)
 
     def test_category_not_empty_string(self):
         """tests if category is not an empty string"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, category="    ", quantity= 10 ,minimum_quantity= 6))
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, category="    ", quantity=10, minimum_quantity=6))
             self.assertEqual(response.status_code, 400)
 
-    def test_keyError_post_product(self):
-        """tests for keyError when a key is missing"""        
+    def test_key_error_post_product(self):
+        """tests for keyError when a key is missing"""
         with self.client as client:
-            response= client.post("api/v1/products", json=dict(product_name= "vest", \
-            price=5000, quantity= 10 ,minimum_quantity= 6))          
+            response = client.post("api/v1/products", json=dict(product_name="vest", \
+            price=5000, quantity=10, minimum_quantity=6))
             self.assertEqual(response.status_code, 400)
 
-            #validating sale order inputs    
+            #validating sale order inputs
     def test_product_name_not_empty_string(self):
         """tests if product_name posted is not an empty string"""
         with self.client as client:
-            response= client.post("api/v1/sales", json=dict(product_name= " ", \
-            price=5000, quantity= 10))
+            response = client.post("api/v1/sales", json=dict(product_name=" ", \
+            price=5000, quantity=10))
             self.assertEqual(response.status_code, 400)
 
     def test_product_name_with_alphabet_only(self):
         """tests if product_name has alphabets only"""
         with self.client as client:
-            response= client.post("api/v1/sales", json=dict(product_name= "123***", \
-            price=5000, quantity= 1))
+            response = client.post("api/v1/sales", json=dict(product_name="123***", \
+            price=5000, quantity=1))
             self.assertEqual(response.status_code, 400)
-    
+
     def test_sale_price_not_string(self):
         """tests if sale price is not a string"""
         with self.client as client:
-            response = client.post("api/v1/sales", json=dict(product_name= "vest", \
-            price="5000", quantity= 1))
+            response = client.post("api/v1/sales", json=dict(product_name="vest", \
+            price="5000", quantity=1))
             self.assertEqual(response.status_code, 400)
 
     def test_sale_price_is_integer(self):
         """tests if sale price is an integer"""
         with self.client as client:
-            response= client.post("api/v1/sales", json=dict(product_name= "vest", \
-            price=3.5, quantity= 1))
+            response = client.post("api/v1/sales", json=dict(product_name="vest", \
+            price=3.5, quantity=1))
             self.assertEqual(response.status_code, 400)
 
     def test_sale_quantity_not_string(self):
         """tests if quantity sold is not a string"""
         with self.client as client:
-            response= client.post("api/v1/sales", json=dict(product_name= "vest", \
-            price=5000, quantity= "ten"))
+            response = client.post("api/v1/sales", json=dict(product_name="vest", \
+            price=5000, quantity="ten"))
             self.assertEqual(response.status_code, 400)
-        
+
     def test_sale_quantity_is_integer(self):
         """tests if quantity sold is an integer"""
         with self.client as client:
-            response= client.post("api/v1/sales", json=dict(product_name= "vest", \
-            price=5000, quantity= 10.677))
+            response = client.post("api/v1/sales", json=dict(product_name="vest", \
+            price=5000, quantity=10.677))
             self.assertEqual(response.status_code, 400)
 
     def test_invalid_key_post_sale(self):
         """tests for invalid key when a key is missing"""
         with self.client as client:
-            response= client.post("api/v1/sales", json=dict( \
-            price=5000, quantity= 10))          
-            self.assertEqual(response.status_code, 400)  
+            response = client.post("api/v1/sales", json=dict(price=5000, quantity=10))
+            self.assertEqual(response.status_code, 400)
+
+    def test_home_route(self):
+        """test for the default home route"""
+        with self.client as client:
+            response = client.get("/")
+            self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
-    unittest.main()  
+    unittest.main()
   
