@@ -1,9 +1,10 @@
 """
 defines sales class in models
 """
-from flask import Flask, jsonify, make_response, request
-import re
+from flask import Flask, jsonify
+
 class Sales:
+    """class for sales module"""
     sale_orders = []
 
     def __init__(self, product_name, price, quantity):
@@ -14,25 +15,29 @@ class Sales:
 
     @classmethod
     def len_of_orders(cls):
+        """class method to return length of sale order list with an increment"""
         return len(cls.sale_orders) + 1
 
     @classmethod
     def add_sale_order(cls, sale_order):
-        """  class method to add a sale order to sale_order     """
+        """ class method to add a sale order to sale_order"""
         cls.sale_orders.append(sale_order)
         return cls.sale_orders
 
     @classmethod
     def fetch_sale_orders(cls):
+        """class method to return all sale orders"""
         return cls.sale_orders
 
     @classmethod
     def fetch_specific_sale_record(cls, sale_id):
+        """class method to return a specific sale order"""
         for sale_order in cls.sale_orders:
             if sale_order['sale_id'] == sale_id:
                 return sale_order
 
     def validate_sale_order(self):
+        """method to validate sale order inputs"""
         if self.product_name.strip() == '':
             return jsonify({'error': "product name cannot be an empty string"}), 400 
         if not self.product_name.isalpha():
