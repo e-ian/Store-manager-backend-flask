@@ -34,14 +34,14 @@ def post_product():
     except KeyError:
         return jsonify({'error': "Missing key fields"}), 400
 
-@app.route('/api/v1/products', methods=['GET'])
+@app.route('/api/v1/products')
 def get_all_products():
     """  get all products    """
-    if request.method == 'GET':
-        all_products = Products.get_products()
+    all_products = Products.get_products()
+    if all_products:
         return make_response(jsonify({'product_list':all_products}), 200)
 
-@app.route('/api/v1/products/<int:product_id>', methods=['GET'])
+@app.route('/api/v1/products/<int:product_id>')
 def get_a_product(product_id):
     """ get a product by product_id """
     get_product = Products.get_single_product(product_id)
@@ -71,14 +71,14 @@ def post_sale_order():
     except KeyError:
         return jsonify({'error': "missing one or more key fields"}), 400
 
-@app.route('/api/v1/sales', methods=['GET'])
+@app.route('/api/v1/sales')
 def get_sale_orders():
     """ get all sale orders """
-    if request.method == 'GET':
-        all_sale_orders = Sales.fetch_sale_orders()
+    all_sale_orders = Sales.fetch_sale_orders()
+    if all_sale_orders:
         return make_response(jsonify({'sale_order_list': all_sale_orders}), 200)
 
-@app.route('/api/v1/sales/<int:sale_id>', methods=['GET'])
+@app.route('/api/v1/sales/<int:sale_id>')
 def get_a_sale_order(sale_id):
     """ get a specific sale order """
     get_sale_order = Sales.fetch_specific_sale_record(sale_id)
