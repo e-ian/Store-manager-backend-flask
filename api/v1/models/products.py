@@ -34,9 +34,9 @@ class Products:
     @classmethod
     def get_single_product(cls, product_id):
         """class method to return a single product"""
-        for product in cls.product_list:
-            if product['product_id'] == product_id:
-                return product
+        product = [product for product in cls.product_list if product['product_id']==product_id]
+        if product:
+            return product[0]
 
     def validate_product_post_input(self):
         """method for validating inputs"""
