@@ -31,8 +31,8 @@ def post_product():
             if product_add:
                 return make_response(jsonify({"message": 'product added successfully'}), 201)
         return valid
-    except KeyError:
-        return jsonify({'error': "Missing key fields"}), 400
+    except Exception:
+        return jsonify({'error': "Invalid input format"}), 400
 
 @app.route('/api/v1/products')
 def get_all_products():
