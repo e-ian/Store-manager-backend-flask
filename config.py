@@ -1,29 +1,16 @@
-"""
-module config
-"""
-class Config:
-    """
-    parent config class
-    """
+"""module to configure database"""
+import os
+
+class Config(object):
+    """super config class"""
     DEBUG = False
+    dbname = "Storemanagerdb"
 
 class DevelopmentConfig(Config):
-    """
-    class for development configuration
-    """
+    """class for development config"""
     DEBUG = True
 
-class TestingConfig(Config):
-    """
-    class for testing configuration
-    """
-    DEBUG = True
-    TESTING = True
-
-class ProductionConfig(Config):
-    """
-    class for production configuration
-    """
+class Testingconfig(Config):
+    """class for testing config"""
     DEBUG = False
-    
-    TESTING = False
+    TESTING = True
