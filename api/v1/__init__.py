@@ -1,5 +1,8 @@
 from flask import Flask
+from config import DevelopmentConfig
 
-app = Flask(__name__)
+def create_app(DevelopmentConfig):
+    app = Flask(__name__)
+    app.config.from_object(DevelopmentConfig)
+    return app
 
-from api.v1.views import views
