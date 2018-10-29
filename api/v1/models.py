@@ -38,9 +38,9 @@ class Datastore(object):
     def drop_tables(self):
         """drops/ deletes tables"""
 
-        drop_user_table = "DROP TABLE users cascade"
-        drop_products_table = "DROP TABLE products cascade"
-        drop_sales_table = "DROP TABLE sales order cascade"
+        drop_user_table = "DROP TABLE users cascade;"
+        drop_products_table = "DROP TABLE products cascade;"
+        drop_sales_table = "DROP TABLE sales order cascade;"
         self.cur.execute(drop_user_table)
         self.cur.execute(drop_products_table)
         self.cur.execute(drop_sales_table)
