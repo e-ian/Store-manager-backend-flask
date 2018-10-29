@@ -29,19 +29,5 @@ class Validate:
             return jsonify({'error': "category cannot be an empty string"}), 400
         return True
 
-    def validate_sale_order(self):
-        """method to validate sale order inputs"""
-        if self.product_name.strip() == '':
-            return jsonify({'error': "product name cannot be an empty string"}), 400 
-        if not self.product_name.isalpha():
-            return jsonify({'error': "product name should have alphabet letters only"}), 400         
-        if isinstance(self.price, str):
-            return jsonify({'error': "price cannot be a string"}), 400
-        if not isinstance(self.price, int):
-            return jsonify({'error': "input price as integer"}), 400
-        if isinstance(self.quantity, str):
-            return jsonify({'error': "quantity cannot be a string"}), 400
-        if not isinstance(self.quantity, int):
-            return jsonify({'error': "input quantity as integer"}), 400        
-        return True
+    
        
