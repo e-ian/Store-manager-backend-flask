@@ -3,10 +3,6 @@
 Store Manager is a web application that helps store owners manage sales and product inventory
 records. This application is meant for use in a single store.
 
-[![Build Status](https://travis-ci.org/e-ian/Store-manager-2.svg?branch=ft_challenge_2)](https://travis-ci.org/e-ian/Store-manager-2)
-[![Coverage Status](https://coveralls.io/repos/github/e-ian/Store-manager-2/badge.svg?branch=ft_challenge_2)](https://coveralls.io/github/e-ian/Store-manager-2?branch=ft_challenge_2)
-[![Maintainability](https://api.codeclimate.com/v1/badges/92702517d537517d9d3c/maintainability)](https://codeclimate.com/github/e-ian/Store-manager-2/maintainability)
-
 # Getting started.
 
 These instructions will help you set and run the application on your local machine.
@@ -29,7 +25,7 @@ The following are required to enable you get started!
 * The code for the UI templates can be accessed using this link: (https://github.com/e-ian/Store-Manager/tree/feat-UI)
 
 ## API endpoints: 
-* The code for the endpoints can be accessed using this link: (https://github.com/e-ian/Store-manager-2/tree/ft_challenge_2)
+* The code for the endpoints can be accessed using this link: (https://github.com/e-ian/Store-manager-2/tree/ft-challenge-3)
 
 # Installation.
 * Clone the remote repository to your local machine using this command:
@@ -58,6 +54,9 @@ To install all required dependencies for the project, use the command:
 
 * Install Postman.
 
+* Install psycogp2
+`pip install psycopg2
+
 
 # Project features/ functionality
 
@@ -79,7 +78,7 @@ To install all required dependencies for the project, use the command:
 | GET      | "/api/v1/products/<product_id>" | Fetches a single product  |
 | GET      | "/api/v1/sales"                 | Fetches all sales         |
 | GET      | "/api/v1/sales/<sale_id>"       | Fetches single sale record|
-
+|PUT       | "/api/v1/products/<product_id>" | Modifies a product        |
 
 
 # Running unittests.
