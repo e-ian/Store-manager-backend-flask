@@ -30,8 +30,8 @@ class Datastore(object):
 
     def create_sales_table(self):
         """creates sales records tables"""
-        sales_table = "CREATE TABLE IF NOT EXISTS sales(sale_id serial PRIMARY KEY, price integer, \
-        quantity integer)"
+        sales_table = "CREATE TABLE IF NOT EXISTS sales(sale_id serial PRIMARY KEY, product_name varchar(100), \
+        price integer, quantity integer)"
         
         self.cur.execute(sales_table)
 
