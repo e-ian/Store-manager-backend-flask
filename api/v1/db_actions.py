@@ -69,8 +69,8 @@ class Users:
     def register_user(self, data):
         """method to register a new user"""
         query = "INSERT INTO users(username, password, role) \
-        VALUES('{}', '{}', 'user')".format(data['username'], \
-        generate_password_hash(data['password']))
+        VALUES('{}', '{}', '{}')".format(data['username'], \
+        generate_password_hash(data['password']), data['role'])
         cursor.execute(query)
         return data
 
