@@ -6,10 +6,11 @@ from api.v1 import app
 from api.v1.validators import Validate
 from api.v1.models import Datastore
 from api.v1.db_actions import Products
-from api.v1.db_actions import Sales
+from api.v1.db_actions import Sales, Users
 
 a = Products()
 b = Sales()
+c = Users()
 
 @app.route('/')
 def index():
@@ -97,3 +98,19 @@ def get_a_sale_order(sale_id):
         return make_response(jsonify({"sale order": get_sale}), 200)
     else:
         return make_response(jsonify({"message": 'sale order not found'}), 404)
+
+@app.route('/api/v1/auth/login', methods=['POST'])
+def log_a_user():
+    """meyth"""
+    login_data ={
+        "username": request.json['username'],
+        "password": request.json['password']
+    }
+
+    user_login = c.login_users(login_data)
+    if not user_login:
+        return make_response(jsonify({"message": 'user not found'}), 404)
+    pass_check = c.check_password(login_data, user_login)
+    if pass_check:
+        return make_response(jsonify({"message": 'login successful'}), 200)
+
