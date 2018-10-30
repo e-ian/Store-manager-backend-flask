@@ -2,8 +2,10 @@
 from api.v1.models import Datastore
 from flask import Flask
 
-app = Flask(__name__)
-from api.v1.views import views
+from api.v1 import app
+
+# app = Flask(__name__)
+# from api.v1.views import views
 
 if __name__ == '__main__':
     db_connect = Datastore()
