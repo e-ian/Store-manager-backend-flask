@@ -6,10 +6,12 @@ from api.v1 import app
 from api.v1.validators import Validate
 from api.v1.models import Datastore
 from api.v1.db_actions import Products
-from api.v1.db_actions import Sales
+from api.v1.db_actions import Sales, Users
+
 
 a = Products()
 b = Sales()
+c = Users()
 
 @app.route('/')
 def index():
@@ -97,3 +99,15 @@ def get_a_sale_order(sale_id):
         return make_response(jsonify({"sale order": get_sale}), 200)
     else:
         return make_response(jsonify({"message": 'sale order not found'}), 404)
+
+@app.route('/api/v1/auth/signup', methods=['POST'])
+def user_register():
+    """meth"""
+    register_data = {
+        "username":request.json['username'],
+        "password":request.json['password'],
+        "role": request.json['role']
+    }
+    c.register_user(register_data)
+    return make_response (jsonify({"message": 'User registered successfully'}), 201)
+
