@@ -74,4 +74,14 @@ class Users:
         cursor.execute(query)
         return data
 
+    def login_users(self, data):
+        """hdhd"""
+        query = "SELECT * FROM users WHERE username ='{}'".format(data['username'])
+        dictcur.execute(query)
+        login = dictcur.fetchone()
+        return login
+
+    def check_password(self, data, db_data):
+        return check_password_hash(data['password'], db_data['password'])
+
 
