@@ -7,27 +7,34 @@ class Validate:
         self.quantity = args[3]
         self.minimum_quantity = args[4]
 
-    def validate_product_post_input(self):
-        """method for validating inputs"""
-        if self.product_name.strip() == '':
-            return jsonify({'error': "product name cannot be an empty string"}), 400
-        if not self.product_name.isalpha():
-            return jsonify({'error': "product name should have alphabet letters only"}), 400   
-        if isinstance(self.price, str):
-            return jsonify({'error': "price cannot be a string"}), 400
-        if not isinstance(self.price, int):
-            return jsonify({'error': "input price as integer"}), 400
-        if isinstance(self.quantity, str):
-            return jsonify({'error': "quantity cannot be a string"}), 400
-        if not isinstance(self.quantity, int):
-            return jsonify({'error': "input quantity as integer"}), 400
-        if isinstance(self.minimum_quantity, str):
-            return jsonify({'error': "minimum quantity cannot be a string"}), 400
-        if not isinstance(self.minimum_quantity, int):
-            return jsonify({'error': "input minimum quantity as integer"}), 400
-        if self.category.strip() == '':
-            return jsonify({'error': "category cannot be an empty string"}), 400
-        return True
+    def validate_prod_name_and_category(self):
+        """method to validate product_name and category inputs"""
+        if not self.product_name or not self.category or self.product_name.isspace() or self.category.isspace() \
+        or not isinstance(self.product_name, str) or not isinstance(self.category, str):
+            return False
+        else:
+            return True
 
-    
-       
+    def validate_price_and_quantity(self):
+        """method to validate price, quantity and minimum quantity inputs"""
+        if not self.price or not self.quantity or not self.minimum_quantity or not isinstance(self.price, int) \
+         or not isinstance(self.quantity, int) or not isinstance(self.minimum_quantity, int):
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def validate_prod_name(product_name):
+        """method to validate product name input of a sale order"""
+        if not product_name or product_name.isspace() or not isinstance(product_name, str):
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def validate_sale_price_and_quantity(price, quantity):
+        """method to validate price and quantity inputs of sale order"""
+        if not price or not quantity or not isinstance(price, int) or not isinstance(quantity, int):
+            return False
+        else:
+            return True
