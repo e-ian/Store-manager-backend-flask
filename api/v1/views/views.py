@@ -12,6 +12,7 @@ from api.v1.db_actions import Sales, Users
 a = Products()
 b = Sales()
 c = Users()
+validator = Validate()
 
 @app.route('/')
 def index():
@@ -102,12 +103,27 @@ def get_a_sale_order(sale_id):
 
 @app.route('/api/v1/auth/signup', methods=['POST'])
 def user_register():
-    """meth"""
+    """method implementing the register user endpoint"""
+    username = request.json['username']
+    password = request.json['password']
+    role = request.json['role']
+
+    valid_username = validator.validate_input_str(username)
+    valid_role = validator.validate_input_str(role)
+    valid_password = validator.validate_password(password)
+    if valid_username:       
+        return valid_username
+    check_user = c.check_username(username)
+    if check_user:
+        return make_response(jsonify({"message": "username already exits"}))    
+    if valid_role:
+        return valid_role
+    if valid_password:
+        return valid_password
     register_data = {
-        "username":request.json['username'],
-        "password":request.json['password'],
-        "role": request.json['role']
+        "username": username,
+        "password": password,
+        "role": role
     }
     c.register_user(register_data)
     return make_response (jsonify({"message": 'User registered successfully'}), 201)
-
