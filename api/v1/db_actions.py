@@ -41,6 +41,15 @@ class Products:
         dictcur.execute(query)
         return dictcur
         
+    @staticmethod
+    def check_product(product_name):
+        """method to check if username exists"""
+        query = "SELECT * FROM products WHERE product_name='{}'".format(product_name)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
+        return data   
+        
+        
 class Sales:
     """Class handling all operations on sales"""
     def add_sale_order(self, data):

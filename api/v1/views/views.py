@@ -10,6 +10,7 @@ from api.v1.db_actions import Sales
 
 a = Products()
 b = Sales()
+validator = Validate()
 
 @app.route('/')
 def index():
@@ -19,24 +20,28 @@ def index():
 @app.route('/api/v1/products', methods=['POST'])
 def post_product():
     """ implements the post products api  """
+    try:       
+        form_data = request.get_json(force=True)
+        product_item = {
+                'product_name': form_data['product_name'],            
+                'price' : form_data['price'],
+                'category' : form_data['category'],
+                'quantity' : form_data['quantity'],
+                'minimum_quantity' : form_data['minimum_quantity']
+            }
+        if not Validate.validate_prod_name_and_category(product_item['product_name'], product_item['category']):
+            return make_response(jsonify({"Message": "Product_name or category cannot be empty and takes alphabets"}), 400)
+        elif not Validate.validate_price_and_quantity(product_item['price'], product_item['quantity'], product_item['minimum_quantity']):
+            return make_response(jsonify({"message": 'Price, quantity and minimum_quantity fields cannot be empty and should be an integer '}), 400)
         
-    form_data = request.get_json(force=True)
-    product_item = {
-            'product_name': form_data['product_name'],            
-            'price' : form_data['price'],
-            'category' : form_data['category'],
-            'quantity' : form_data['quantity'],
-            'minimum_quantity' : form_data['minimum_quantity']
-        }
-    valid = Validate(product_item['product_name'], product_item['category'], product_item['price'], \
-        product_item['quantity'], product_item['minimum_quantity'])
-    if not valid.validate_prod_name_and_category():
-        return make_response(jsonify({"Message": "Product_name or category cannot be empty and takes alphabets"}), 400)
-    elif not valid.validate_price_and_quantity():
-        return make_response(jsonify({"message": 'Price, quantity and minimum_quantity fields cannot be empty and should be an integer '}), 400)
-    else:
-        a.add_product(product_item)
-        return make_response(jsonify({"message": 'product added successfully'}), 201)
+        check_product = a.check_product(product_item['product_name'])
+        if check_product:
+            return make_response(jsonify({"message": "product already exits"}), 400)
+        else:
+            a.add_product(product_item)
+            return make_response(jsonify({"message": 'product added successfully'}), 201)
+    except Exception:
+        return make_response(jsonify({"error": 'invalid input format'}), 400)
 
 @app.route('/api/v1/products')
 def get_all_products():
@@ -56,7 +61,8 @@ def get_a_product(product_id):
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
-    """method to edit or modify an existing product"""
+    """method to edit or modify an existing product"""  
+    
     pdt_list = a.get_single_product(product_id)
     data = request.get_json(force=True)
     if pdt_list:
