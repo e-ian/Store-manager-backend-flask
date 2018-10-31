@@ -33,5 +33,3 @@ class Validate:
             return False
         else:
             return True
-
-    

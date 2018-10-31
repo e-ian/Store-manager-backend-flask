@@ -44,9 +44,26 @@ def post_product():
     except Exception:
         return make_response(jsonify({"error": 'invalid input format'}), 400)
 
+@app.route('/api/v1/products')
+def get_all_products():
+    """implements get all products api"""
+    all_products = a.get_products()
+    if all_products:
+        return make_response(jsonify({'product_list':all_products}), 200)
+
+@app.route('/api/v1/products/<int:product_id>')
+def get_a_product(product_id):
+    """ method to get a product by product_id """
+    get_product = a.get_single_product(product_id)
+    if get_product:
+        return make_response(jsonify({'product': get_product}), 200)
+    else:
+        return make_response(jsonify({'message': 'product not found'}), 404)
+
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
-    """method to edit or modify an existing product"""
+    """method to edit or modify an existing product"""  
+    
     pdt_list = a.get_single_product(product_id)
     data = request.get_json(force=True)
     if pdt_list:
