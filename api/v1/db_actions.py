@@ -75,7 +75,7 @@ class Users:
         return data
 
     def login_users(self, data):
-        """hdhd"""
+        """method to login users"""
         query = "SELECT * FROM users WHERE username ='{}'".format(data['username'])
         dictcur.execute(query)
         login = dictcur.fetchone()
