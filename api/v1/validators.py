@@ -37,4 +37,4 @@ class Validate:
         if not price or not quantity or not isinstance(price, int) or not isinstance(quantity, int):
             return False
         else:
-            return True
+            return True   
