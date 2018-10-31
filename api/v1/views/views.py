@@ -19,9 +19,12 @@ def index():
     return jsonify({'message': 'welcome to store manager'})
 
 @app.route('/api/v1/products', methods=['POST'])
+@jwt_required
 def post_product():
     """ implements the post products api  """
-
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'admin':
+        return make_response(jsonify({'message': "Unauthorised access"}), 401)
     try:        
         form_data = request.get_json(force=True)
         product_item = {
@@ -62,9 +65,13 @@ def get_a_product(product_id):
         return make_response(jsonify({'message': 'product not found'}), 404)    
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
+@jwt_required
 def edit_product(product_id):
-    """method to edit or modify an existing product"""  
-    
+    """method to edit or modify an existing product"""
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'admin':
+        return make_response(jsonify({'message': "Unauthorised access"}), 401)
+  
     pdt_list = a.get_single_product(product_id)
     data = request.get_json(force=True)
     if pdt_list:
@@ -74,8 +81,12 @@ def edit_product(product_id):
         return make_response(jsonify({'message': 'product does not exist'}), 404)
 
 @app.route('/api/v1/sales', methods=['POST'])
+@jwt_required
 def post_sale_order():
     """ adds a sale order """
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'attendant':
+        return make_response(jsonify({'message': "Unauthorised access"}), 401)
     try:
         data = request.get_json(force=True)
         sale_order = {
@@ -94,8 +105,13 @@ def post_sale_order():
         return make_response(jsonify({"error": 'invalid input format'}), 400)
 
 @app.route('/api/v1/sales')
+@jwt_required
 def get_all_sale_orders():
     """implements get all sale orders endpoint"""
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'admin':
+        return make_response(jsonify({'message': "Unauthorised access"}), 401)
+
     sale_orders = b.get_sale_orders()
     if sale_orders:
         return make_response(jsonify({'sale_list': sale_orders}), 200)
@@ -130,16 +146,21 @@ def log_a_user():
         return make_response(jsonify({"message": "username or password is wrong"}), 400)
 
 @app.route('/api/v1/auth/signup', methods=['POST'])
+@jwt_required
 def user_register():
     """method implementing the register user endpoint"""
+    current_user = get_jwt_identity()
+    if current_user['role'] != 'admin':
+        return make_response(jsonify({'message': "Unauthorised access"}), 401)
+   
     username = request.json['username']
     password = request.json['password']
     role = request.json['role']
 
     valid_username = validator.validate_input_str(username)
     valid_role = validator.validate_input_str(role)
-    valid_password = validator.validate_input_str(password) 
-    if valid_username:       
+    valid_password = validator.validate_password(password) 
+    if valid_username:
         return valid_username   
     if valid_role:
         return valid_role

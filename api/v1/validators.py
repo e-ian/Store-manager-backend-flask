@@ -1,3 +1,4 @@
+"""module validators"""
 from flask import Flask, jsonify
 import re
 class Validate:
@@ -50,7 +51,6 @@ class Validate:
         """method to validate password input"""
         if not len(password) >= 6:
             return jsonify({"error": "password length should be equal or greater than 6"}), 400
-        if not re.search(r'\d', password):
-            return jsonify({"error": "password should contain a digit"}), 400
-        if not re.search(r'\W', password):
-            return jsonify({"error": "password should contain some alpha numeric characters"}), 400
+        if not re.search(r"^[a-zA-Z0-9]+$", password):
+            return jsonify({"error": "password should contain alphanumeric characters"}), 400
+        
