@@ -39,7 +39,8 @@ class Products:
         quantity='{}', minimum_quantity='{}' WHERE product_id='{}'".format(product_name, \
         price, category, quantity, minimum_quantity, product_id)
         dictcur.execute(query)
-        return dictcur
+        return dictcur      
+        
         
 class Sales:
     """Class handling all operations on sales"""
