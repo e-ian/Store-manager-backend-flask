@@ -54,7 +54,4 @@ class Validate:
             return jsonify({"error": "password should contain a digit"}), 400
         if not re.search(r'\W', password):
             return jsonify({"error": "password should contain some alpha numeric characters"}), 400
-        
-
-
    

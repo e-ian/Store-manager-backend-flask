@@ -22,7 +22,8 @@ def index():
 @app.route('/api/v1/products', methods=['POST'])
 def post_product():
     """ implements the post products api  """
-    try:        
+    
+    try:       
         form_data = request.get_json(force=True)
         product_item = {
                 'product_name': form_data['product_name'],            
@@ -45,7 +46,6 @@ def post_product():
     except Exception:
         return make_response(jsonify({"error": 'invalid input format'}), 400)
 
-
 @app.route('/api/v1/products')
 def get_all_products():
     """implements get all products api"""
@@ -64,7 +64,8 @@ def get_a_product(product_id):
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
-    """method to edit or modify an existing product"""
+    """method to edit or modify an existing product"""  
+    
     pdt_list = a.get_single_product(product_id)
     data = request.get_json(force=True)
     if pdt_list:
