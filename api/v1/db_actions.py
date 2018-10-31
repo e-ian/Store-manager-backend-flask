@@ -40,11 +40,7 @@ class Products:
         price, category, quantity, minimum_quantity, product_id)
         dictcur.execute(query)
         return dictcur
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> ft_login_user
     @staticmethod
     def check_product(product_name):
         """method to check if username exists"""
@@ -52,18 +48,6 @@ class Products:
         dictcur.execute(query)
         data = dictcur.fetchone()
         return data
-<<<<<<< HEAD
-        
-    @staticmethod
-    def check_product(product_name):
-        """method to check if username exists"""
-        query = "SELECT * FROM products WHERE product_name='{}'".format(product_name)
-        dictcur.execute(query)
-        data = dictcur.fetchone()
-        return data   
-        
-=======
->>>>>>> ft_login_user
         
 class Sales:
     """Class handling all operations on sales"""
@@ -98,15 +82,6 @@ class Users:
         cursor.execute(query)
         return data
 
-<<<<<<< HEAD
-    @staticmethod
-    def check_username(username):
-        """method to check if username exists"""
-        query = "SELECT * FROM users WHERE username='{}'".format(username)
-        dictcur.execute(query)
-        data = dictcur.fetchone()
-        return data
-=======
     def login_users(self, data):
         """method to login users"""
         query = "SELECT * FROM users WHERE username ='{}'".format(data['username'])
@@ -116,6 +91,5 @@ class Users:
 
     def check_password(self, data, db_data):
         return check_password_hash(data, db_data)
->>>>>>> ft_login_user
 
 
