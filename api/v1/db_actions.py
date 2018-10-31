@@ -39,7 +39,15 @@ class Products:
         quantity='{}', minimum_quantity='{}' WHERE product_id='{}'".format(product_name, \
         price, category, quantity, minimum_quantity, product_id)
         dictcur.execute(query)
-        return dictcur      
+        return dictcur
+        
+    @staticmethod
+    def check_product(product_name):
+        """method to check if username exists"""
+        query = "SELECT * FROM products WHERE product_name='{}'".format(product_name)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
+        return data   
         
         
 class Sales:
