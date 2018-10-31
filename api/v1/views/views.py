@@ -2,15 +2,16 @@
 module views
 """
 from flask import Flask, jsonify, request, make_response
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity)
 from api.v1 import app
 from api.v1.validators import Validate
+from api.v1.db_actions import Products, Sales, Users
 from api.v1.models import Datastore
-from api.v1.db_actions import Products
-from api.v1.db_actions import Sales, Users
 
 a = Products()
 b = Sales()
 c = Users()
+validator = Validate()
 
 @app.route('/')
 def index():
@@ -64,7 +65,7 @@ def edit_product(product_id):
         a.modify_product(data['product_id'], data['product_name'], data['price'], data['category'], data['quantity'], data['minimum_quantity'])
         return make_response(jsonify({'message': 'product edited'}),200)
     else:
-        return make_response(jsonify({'message': 'product doesnot exist'}), 404)
+        return make_response(jsonify({'message': 'product does not exist'}), 404)
 
 @app.route('/api/v1/sales', methods=['POST'])
 def post_sale_order():
@@ -101,16 +102,19 @@ def get_a_sale_order(sale_id):
 
 @app.route('/api/v1/auth/login', methods=['POST'])
 def log_a_user():
-    """meyth"""
+    """method implementing api for logging in user"""
     login_data ={
-        "username": request.json['username'],
-        "password": request.json['password']
+        "username": request.json["username"],
+        "password": request.json["password"]
     }
 
     user_login = c.login_users(login_data)
-    if not user_login:
-        return make_response(jsonify({"message": 'user not found'}), 404)
-    pass_check = c.check_password(login_data, user_login)
-    if pass_check:
-        return make_response(jsonify({"message": 'login successful'}), 200)
+    if user_login:
+        pass_check = c.check_password(login_data, user_login)
+        access_token = create_access_token(identity=user_login)
 
+        return make_response(jsonify({"access_token": access_token}), 200)
+    # if pass_check:
+    #     return make_response(jsonify({"message": 'login successful'}), 200)
+    else:
+        return make_response(jsonify({"message": "username or password is wrong"}), 400)
