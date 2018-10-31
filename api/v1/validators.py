@@ -1,10 +1,6 @@
 from flask import Flask, jsonify
-<<<<<<< HEAD
-class Validate:
-=======
 import re
-class Validate:  
->>>>>>> ft_register_user
+class Validate:
 
     @staticmethod
     def validate_prod_name_and_category(product_name, category):
@@ -38,6 +34,7 @@ class Validate:
             return False
         else:
             return True
+
     @staticmethod
     def validate_input_str(input_str):
         """method to validate if input is string"""
