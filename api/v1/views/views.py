@@ -59,15 +59,7 @@ def get_a_product(product_id):
     if get_product:
         return make_response(jsonify({'product': get_product}), 200)
     else:
-        return make_response(jsonify({'message': 'product not found'}), 404)        
-        check_product = a.check_product(product_item['product_name'])
-        if check_product:
-            return make_response(jsonify({"message": "product already exits"}), 400)
-        else:
-            a.add_product(product_item)
-            return make_response(jsonify({"message": 'product added successfully'}), 201)
-    except Exception:
-        return make_response(jsonify({"error": 'invalid input format'}), 400)
+        return make_response(jsonify({'message': 'product not found'}), 404)    
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
@@ -136,3 +128,30 @@ def log_a_user():
         return make_response(jsonify({"message": 'login successful', "access_token":access_token}), 200)
     else:
         return make_response(jsonify({"message": "username or password is wrong"}), 400)
+
+@app.route('/api/v1/auth/signup', methods=['POST'])
+def user_register():
+    """method implementing the register user endpoint"""
+    username = request.json['username']
+    password = request.json['password']
+    role = request.json['role']
+
+    valid_username = validator.validate_input_str(username)
+    valid_role = validator.validate_input_str(role)
+    valid_password = validator.validate_input_str(password) 
+    if valid_username:       
+        return valid_username   
+    if valid_role:
+        return valid_role
+    check_user = c.check_username(username)   
+    if check_user:
+        return make_response(jsonify({"message": "username already exits"}), 400) 
+    if valid_password:
+        return valid_password
+    register_data = {
+        "username": username,
+        "password": password,
+        "role": role
+    }
+    c.register_user(register_data)
+    return make_response (jsonify({"message": 'User registered successfully'}), 201)
