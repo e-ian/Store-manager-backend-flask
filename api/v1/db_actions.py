@@ -74,4 +74,11 @@ class Users:
         cursor.execute(query)
         return data
 
+    @staticmethod
+    def check_username(username):
+        """method to check if username exists"""
+        query = "SELECT * FROM users WHERE username='{}'".format(username)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
+        return data
 
