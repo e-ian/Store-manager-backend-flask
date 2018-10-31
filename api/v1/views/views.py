@@ -56,7 +56,8 @@ def get_a_product(product_id):
 
 @app.route('/api/v1/products/<int:product_id>', methods=['PUT'])
 def edit_product(product_id):
-    """method to edit or modify an existing product"""
+    """method to edit or modify an existing product"""  
+    
     pdt_list = a.get_single_product(product_id)
     data = request.get_json(force=True)
     if pdt_list:
