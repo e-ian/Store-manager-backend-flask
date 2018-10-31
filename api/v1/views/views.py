@@ -48,8 +48,10 @@ def get_all_products():
         return make_response(jsonify({'product_list':all_products}), 200)
 
 @app.route('/api/v1/products/<int:product_id>')
+@jwt_required
 def get_a_product(product_id):
     """ method to get a product by product_id """
+    current_user = get_jwt_identity()
     get_product = a.get_single_product(product_id)
     if get_product:
         return make_response(jsonify({'product': get_product}), 200)
