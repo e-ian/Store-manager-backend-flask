@@ -88,6 +88,14 @@ class Users:
         dictcur.execute(query)
         login = dictcur.fetchone()
         return login
+    
+    @staticmethod
+    def check_username(username):
+        """method to check if username exists"""
+        query = "SELECT * FROM users WHERE username='{}'".format(username)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
+        return data
 
     def check_password(self, data, db_data):
         return check_password_hash(data, db_data)
