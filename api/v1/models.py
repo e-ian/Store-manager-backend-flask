@@ -16,7 +16,7 @@ class Datastore(object):
     def create_user_table(self):
         """method creates table in database for users"""
         user_table = "CREATE TABLE IF NOT EXISTS users(user_id serial PRIMARY KEY, \
-        username varchar(50), password varchar(25), role varchar(15))"
+        username varchar(50), password varchar(256), role varchar(15))"
 
         self.cur.execute(user_table)
 

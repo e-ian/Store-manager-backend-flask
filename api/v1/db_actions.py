@@ -40,6 +40,14 @@ class Products:
         price, category, quantity, minimum_quantity, product_id)
         dictcur.execute(query)
         return dictcur
+    
+    @staticmethod
+    def check_product(product_name):
+        """method to check if username exists"""
+        query = "SELECT * FROM products WHERE product_name='{}'".format(product_name)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
+        return data
         
     @staticmethod
     def check_product(product_name):
@@ -78,9 +86,17 @@ class Users:
     def register_user(self, data):
         """method to register a new user"""
         query = "INSERT INTO users(username, password, role) \
-        VALUES('{}', '{}', 'user')".format(data['username'], \
-        generate_password_hash(data['password']))
+        VALUES('{}', '{}', '{}')".format(data['username'], \
+        generate_password_hash(data['password']), data['role'])
         cursor.execute(query)
+        return data
+
+    @staticmethod
+    def check_username(username):
+        """method to check if username exists"""
+        query = "SELECT * FROM users WHERE username='{}'".format(username)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
         return data
 
 

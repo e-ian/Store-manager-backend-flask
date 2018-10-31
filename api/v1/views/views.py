@@ -6,10 +6,15 @@ from api.v1 import app
 from api.v1.validators import Validate
 from api.v1.models import Datastore
 from api.v1.db_actions import Products
-from api.v1.db_actions import Sales
+from api.v1.db_actions import Sales, Users
+
 
 a = Products()
 b = Sales()
+<<<<<<< HEAD
+=======
+c = Users()
+>>>>>>> ft_register_user
 validator = Validate()
 
 @app.route('/')
@@ -20,7 +25,11 @@ def index():
 @app.route('/api/v1/products', methods=['POST'])
 def post_product():
     """ implements the post products api  """
+<<<<<<< HEAD
     try:       
+=======
+    try:        
+>>>>>>> ft_register_user
         form_data = request.get_json(force=True)
         product_item = {
                 'product_name': form_data['product_name'],            
@@ -42,7 +51,7 @@ def post_product():
             return make_response(jsonify({"message": 'product added successfully'}), 201)
     except Exception:
         return make_response(jsonify({"error": 'invalid input format'}), 400)
-
+        
 @app.route('/api/v1/products')
 def get_all_products():
     """implements get all products api"""
@@ -74,19 +83,22 @@ def edit_product(product_id):
 @app.route('/api/v1/sales', methods=['POST'])
 def post_sale_order():
     """ adds a sale order """
-    data = request.get_json(force=True)
-    sale_order = {
-        "product_name": data['product_name'],
-        "price": data["price"],
-        "quantity": data["quantity"]
-    }
-    if not Validate.validate_prod_name(sale_order['product_name']):
-        return make_response(jsonify({"Message": "Product_name cannot be empty and takes alphabets"}), 400)
-    elif not Validate.validate_sale_price_and_quantity(sale_order['price'], sale_order['quantity']):
-        return make_response(jsonify({"message": 'Price and quantity fields cannot be empty and should be an integer '}), 400)
-    else:
-        b.add_sale_order(sale_order)
-        return make_response(jsonify({"message": 'sale order added successfully'}), 201)
+    try:
+        data = request.get_json(force=True)
+        sale_order = {
+            "product_name": data['product_name'],
+            "price": data["price"],
+            "quantity": data["quantity"]
+        }
+        if not Validate.validate_prod_name(sale_order['product_name']):
+            return make_response(jsonify({"Message": "Product_name cannot be empty and takes alphabets"}), 400)
+        elif not Validate.validate_sale_price_and_quantity(sale_order['price'], sale_order['quantity']):
+            return make_response(jsonify({"message": 'Price and quantity fields cannot be empty and should be an integer '}), 400)
+        else:
+            b.add_sale_order(sale_order)
+            return make_response(jsonify({"message": 'sale order added successfully'}), 201)
+    except Exception:
+        return make_response(jsonify({"error": 'invalid input format'}), 400)
 
 @app.route('/api/v1/sales')
 def get_all_sale_orders():
@@ -103,3 +115,30 @@ def get_a_sale_order(sale_id):
         return make_response(jsonify({"sale order": get_sale}), 200)
     else:
         return make_response(jsonify({"message": 'sale order not found'}), 404)
+
+@app.route('/api/v1/auth/signup', methods=['POST'])
+def user_register():
+    """method implementing the register user endpoint"""
+    username = request.json['username']
+    password = request.json['password']
+    role = request.json['role']
+
+    valid_username = validator.validate_input_str(username)
+    valid_role = validator.validate_input_str(role)
+    valid_password = validator.validate_input_str(password) 
+    if valid_username:       
+        return valid_username   
+    if valid_role:
+        return valid_role
+    check_user = c.check_username(username)   
+    if check_user:
+        return make_response(jsonify({"message": "username already exits"}), 400) 
+    if valid_password:
+        return valid_password
+    register_data = {
+        "username": username,
+        "password": password,
+        "role": role
+    }
+    c.register_user(register_data)
+    return make_response (jsonify({"message": 'User registered successfully'}), 201)

@@ -1,5 +1,10 @@
 from flask import Flask, jsonify
+<<<<<<< HEAD
 class Validate:
+=======
+import re
+class Validate:  
+>>>>>>> ft_register_user
 
     @staticmethod
     def validate_prod_name_and_category(product_name, category):
@@ -33,5 +38,22 @@ class Validate:
             return False
         else:
             return True
+    @staticmethod
+    def validate_input_str(input_str):
+        """method to validate if input is string"""
+        if re.search(r'\s', input_str):
+            return jsonify({'error': "input field cannot have empty spaces"}), 400
+        if re.search(r'\d', input_str):
+            return jsonify({'error': "input field shouldnot have digits but letters"}), 400
+        if re.search(r'\W', input_str):
+            return jsonify({'error': "input field should have alphabets only"}), 400
 
-   
+    @staticmethod
+    def validate_password(password):
+        """method to validate password input"""
+        if not len(password) >= 6:
+            return jsonify({"error": "password length should be equal or greater than 6"}), 400
+        if not re.search(r'\d', password):
+            return jsonify({"error": "password should contain a digit"}), 400
+        if not re.search(r'\W', password):
+            return jsonify({"error": "password should contain some alpha numeric characters"}), 400
