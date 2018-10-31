@@ -40,6 +40,14 @@ class Products:
         price, category, quantity, minimum_quantity, product_id)
         dictcur.execute(query)
         return dictcur
+
+    @staticmethod
+    def check_product(product_name):
+        """method to check if username exists"""
+        query = "SELECT * FROM products WHERE product_name='{}'".format(product_name)
+        dictcur.execute(query)
+        data = dictcur.fetchone()
+        return data
         
 class Sales:
     """Class handling all operations on sales"""
@@ -82,6 +90,6 @@ class Users:
         return login
 
     def check_password(self, data, db_data):
-        return check_password_hash(data['password'], db_data['password'])
+        return check_password_hash(data, db_data)
 
 
