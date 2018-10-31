@@ -143,7 +143,7 @@ def user_register():
         return valid_username   
     if valid_role:
         return valid_role
-    check_user = c.check_username(username)   
+    check_user = c.check_username(username)  
     if check_user:
         return make_response(jsonify({"message": "username already exits"}), 400) 
     if valid_password:
