@@ -1,0 +1,3 @@
+service_name: travis-CI
+repo_token: XnPeiZwF8itRxoA1pMtQwrhT8Cuw21gMu
+parallel : True
