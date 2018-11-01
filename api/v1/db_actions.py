@@ -41,6 +41,12 @@ class Products:
         dictcur.execute(query)
         return dictcur
 
+    def delete_product(self, product_id):
+        """method to delete a product"""
+        query = "DELETE FROM products WHERE product_id='{}'".format(product_id)
+        del_pdt = cursor.execute(query)
+        return del_pdt        
+
     @staticmethod
     def check_product(product_name):
         """method to check if username exists"""
