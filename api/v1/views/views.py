@@ -80,6 +80,14 @@ def edit_product(product_id):
     else:
         return make_response(jsonify({'message': 'product does not exist'}), 404)
 
+@app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
+def delete_product(product_id):
+    """method to delete a product"""
+    pdt_list = a.get_single_product(product_id)
+    if pdt_list:
+        a.delete_product(product_id)
+        return make_response(jsonify({'message': 'product deleted'}),200)
+
 @app.route('/api/v1/sales', methods=['POST'])
 @jwt_required
 def post_sale_order():
@@ -141,7 +149,7 @@ def log_a_user():
         
     if user_login and pass_check:
         access_token = create_access_token(identity=user_login)
-        return make_response(jsonify({"message": 'login successful', "access_token":access_token}), 200)
+        return make_response(jsonify({"access_token":access_token}), 200)
     else:
         return make_response(jsonify({"message": "username or password is wrong"}), 400)
 
