@@ -71,7 +71,7 @@ def edit_product(product_id):
     current_user = get_jwt_identity()
     if current_user['role'] != 'admin':
         return make_response(jsonify({'message': "Unauthorised access"}), 401)
-  
+    
     pdt_list = a.get_single_product(product_id)
     data = request.get_json(force=True)
     if pdt_list:
@@ -86,7 +86,7 @@ def delete_product(product_id):
     pdt_list = a.get_single_product(product_id)
     if pdt_list:
         a.delete_product(product_id)
-        return make_response(jsonify({'message': 'product deleted'}),200)
+        return make_response(jsonify({'message': 'product deleted successfully'}),200)
 
 @app.route('/api/v1/sales', methods=['POST'])
 @jwt_required
