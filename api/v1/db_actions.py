@@ -44,8 +44,8 @@ class Products:
     def delete_product(self, product_id):
         """method to delete a product"""
         query = "DELETE FROM products WHERE product_id='{}'".format(product_id)
-        del_pdt = cursor.execute(query)
-        return del_pdt        
+        delete_prod = cursor.execute(query)
+        return delete_prod       
 
     @staticmethod
     def check_product(product_name):

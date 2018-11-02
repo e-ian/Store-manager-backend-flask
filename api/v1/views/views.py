@@ -88,7 +88,7 @@ def edit_product(product_id):
     except Exception:
         return make_response(jsonify({"error": 'invalid input format'}), 400)
 
-@app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
+ @app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     """method to delete a product"""
     pdt_list = a.get_single_product(product_id)
