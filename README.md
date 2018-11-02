@@ -22,7 +22,7 @@ The following are required to enable you get started!
 
 ## User interface: 
 * The project user interface pages are hosted on gh-pages and can be accessed on this link: (https://e-ian.github.io/Store-Manager/UI/index.html). 
-* The code for the UI templates can be accessed using this link: (https://github.com/e-ian/Store-Manager/tree/feat-UI)
+* The code for the UI templates can be accessed using this link: (https://github.com/e-ian/Store-manager-2/tree/develop)
 
 ## API endpoints: 
 * The code for the endpoints can be accessed using this link: (https://github.com/e-ian/Store-manager-2/tree/ft-challenge-3)
@@ -79,6 +79,10 @@ To install all required dependencies for the project, use the command:
 | GET      | "/api/v1/sales"                 | Fetches all sales         |
 | GET      | "/api/v1/sales/<sale_id>"       | Fetches single sale record|
 |PUT       | "/api/v1/products/<product_id>" | Modifies a product        |
+|DELETE    | "/api/v1/products/<product_id>" | Deletes a product         |
+|POST      | "/api/v1/auth/signup"            | Register a user          |
+|POST |"api/v1/auth/login"                  | Login a user |
+
 
 
 # Running unittests.
@@ -97,19 +101,7 @@ To install all required dependencies for the project, use the command:
 
 # Deployment
 
-The app has been hosted on heroku and can be accessed using the following link (https://eian.herokuapp.com/)
 
 # Author:
 
 Emmanuel Ogwal
-
-
-
-
-
-
-
-
-
-
-
