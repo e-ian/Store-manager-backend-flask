@@ -36,7 +36,7 @@ class Products:
     def modify_product(self, product_id, product_name, price, category, quantity, minimum_quantity):
         """modifies or edits a single product"""
         query = "UPDATE products SET product_name='{}', price='{}', category='{}', \
-        quantity='{}', minimum_quantity='{}' WHERE product_id='{}'".format(product_name, \
+        quantity='{}', minimum_quantity='{}' WHERE product_id='{}';".format(product_name, \
         price, category, quantity, minimum_quantity, product_id)
         dictcur.execute(query)
         return dictcur
@@ -61,6 +61,7 @@ class Sales:
         """method to add sale order"""
         query = "INSERT INTO sales(product_name, price, quantity) \
         VALUES('{}', '{}', '{}')".format(data['product_name'], data['price'], data['quantity'])
+
         cursor.execute(query)
         return data
 
@@ -105,5 +106,3 @@ class Users:
 
     def check_password(self, data, db_data):
         return check_password_hash(data, db_data)
-
-
