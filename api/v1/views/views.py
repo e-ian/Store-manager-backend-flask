@@ -34,10 +34,14 @@ def post_product():
                 'quantity' : form_data['quantity'],
                 'minimum_quantity' : form_data['minimum_quantity']
             }
-        if not Validate.validate_prod_name_and_category(product_item['product_name'], product_item['category']):
-            return make_response(jsonify({"Message": "Product_name or category cannot be empty and takes alphabets"}), 400)
-        elif not Validate.validate_price_and_quantity(product_item['price'], product_item['quantity'], product_item['minimum_quantity']):
-            return make_response(jsonify({"message": 'Price, quantity and minimum_quantity fields cannot be empty and should be an integer '}), 400)
+        if not Validate.validate_prod_name_and_category(product_item['product_name'], \
+        product_item['category']):
+            return make_response(jsonify({"Message": "Product_name or category cannot be \
+            empty and takes alphabets"}), 400)
+        elif not Validate.validate_price_and_quantity(product_item['price'], \
+        product_item['quantity'], product_item['minimum_quantity']):
+            return make_response(jsonify({"message": 'Price, quantity and minimum_quantity \
+            fields cannot be empty and should be an integer '}), 400)
         
         check_product = a.check_product(product_item['product_name'])
         if check_product:
@@ -68,17 +72,21 @@ def get_a_product(product_id):
 @jwt_required
 def edit_product(product_id):
     """method to edit or modify an existing product"""
-    current_user = get_jwt_identity()
-    if current_user['role'] != 'admin':
-        return make_response(jsonify({'message': "Unauthorised access"}), 401)
-  
-    pdt_list = a.get_single_product(product_id)
-    data = request.get_json(force=True)
-    if pdt_list:
-        a.modify_product(data['product_id'], data['product_name'], data['price'], data['category'], data['quantity'], data['minimum_quantity'])
-        return make_response(jsonify({'message': 'product edited'}),200)
-    else:
-        return make_response(jsonify({'message': 'product does not exist'}), 404)
+    try:
+        current_user = get_jwt_identity()
+        if current_user['role'] != 'admin':
+            return make_response(jsonify({'message': "Unauthorised access"}), 401)
+    
+        pdt_list = a.get_single_product(product_id)
+        data = request.get_json(force=True)
+        if pdt_list:
+            a.modify_product(data['product_id'], data['product_name'], data['price'], \
+            data['category'], data['quantity'], data['minimum_quantity'])
+            return make_response(jsonify({'message': 'product edited'}), 200)
+        else:
+            return make_response(jsonify({'message': 'product does not exist'}), 404)
+    except Exception:
+        return make_response(jsonify({"error": 'invalid input format'}), 400)
 
 @app.route('/api/v1/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
@@ -86,7 +94,9 @@ def delete_product(product_id):
     pdt_list = a.get_single_product(product_id)
     if pdt_list:
         a.delete_product(product_id)
-        return make_response(jsonify({'message': 'product deleted'}),200)
+        return make_response(jsonify({'message': 'product deleted'}), 200)
+    else:
+        return make_response(jsonify({'message': 'product doesnot exist'}), 404)
 
 @app.route('/api/v1/sales', methods=['POST'])
 @jwt_required
@@ -103,12 +113,19 @@ def post_sale_order():
             "quantity": data["quantity"]
         }
         if not Validate.validate_prod_name(sale_order['product_name']):
-            return make_response(jsonify({"Message": "Product_name cannot be empty and takes alphabets"}), 400)
-        elif not Validate.validate_sale_price_and_quantity(sale_order['price'], sale_order['quantity']):
-            return make_response(jsonify({"message": 'Price and quantity fields cannot be empty and should be an integer '}), 400)
+            return make_response(jsonify({"Message": "Product_name cannot be empty \
+            and takes alphabets"}), 400)
+        elif not Validate.validate_sale_price_and_quantity(sale_order['price'], \
+        sale_order['quantity']):
+            return make_response(jsonify({"message": 'Price and quantity fields \
+            cannot be empty and should be an integer '}), 400)
         else:
-            b.add_sale_order(sale_order)
-            return make_response(jsonify({"message": 'sale order added successfully'}), 201)
+            exist_product = a.check_product(sale_order['product_name'])
+            if exist_product:
+                b.add_sale_order(sale_order)
+                return make_response(jsonify({"message": 'sale order added successfully'}), 201)
+            else:
+                return make_response(jsonify({"message": 'Product not in inventory'}), 201)
     except Exception:
         return make_response(jsonify({"error": 'invalid input format'}), 400)
 
@@ -141,8 +158,7 @@ def log_a_user():
         "password": request.json["password"]
     }
 
-    user_login = c.login_users(login_data)
-    
+    user_login = c.login_users(login_data)    
     if not user_login:
         return make_response(jsonify({"message":"Username does not exist"}), 404)
     pass_check = c.check_password(user_login["password"], login_data["password"])
