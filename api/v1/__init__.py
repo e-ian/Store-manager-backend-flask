@@ -7,9 +7,6 @@ app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'akokoro'
 jwt = JWTManager(app)
 db_connect = Datastore()
-db_connect.create_user_table()
-db_connect.create_products_table()
-db_connect.create_sales_table()
 from api.v1.views import views
 
 
