@@ -219,8 +219,6 @@ class TestApi(unittest.TestCase):
             response = client.post("api/v1/sales", json=dict(price=5000, quantity=10))
             self.assertEqual(response.status_code, 400)
 
-
-
     def test_home_route(self):
         """test for the default home route"""
         with self.client as client:
