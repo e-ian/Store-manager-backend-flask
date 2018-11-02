@@ -1,16 +1,24 @@
 """Database model"""
+import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
 class Datastore(object):
     def __init__(self):
-        """constructor method for connecting to the database"""       
-        self.conn = psycopg2.connect(dbname="storemanagerdb", user="postgres", host="localhost", password="alimanu", port="5432")
+        """constructor method for connecting to the database""" 
+        if os.getenv("Testingenv") == "EnvTests":
+            dbname = "testdb"
+        else:
+            dbname = "storemanagerdb"
+        self.conn = psycopg2.connect(dbname=dbname, user="postgres", host="localhost", password="alimanu", port="5432")
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
         self.dict_cursor = self.conn.cursor(cursor_factory=RealDictCursor)
+        self.create_user_table()
+        self.create_products_table()
+        self.create_sales_table()
 
-        print ("Connected to storemanagerdb")
+        print (dbname)
             
 
     def create_user_table(self):
