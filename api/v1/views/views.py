@@ -201,7 +201,7 @@ def user_register():
     c.register_user(register_data)
     return make_response (jsonify({"message": 'User registered successfully'}), 201)
 
-@app.route('/api/v1/auth/register', methods=['POST'])
+@app.route('/api/v1/auth/admin', methods=['POST'])
 def register_admin():
     """method implementing register admin endpoint"""
     username = request.json['username']
