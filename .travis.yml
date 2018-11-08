@@ -9,6 +9,9 @@ install:
   - pip install coveralls
   - pip install pytest
 
+before_script:
+  -"psql -c 'create database testdb;' -U postgres"
+
 script:
   - pytest --cov=api tests/
 
