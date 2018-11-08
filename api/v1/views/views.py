@@ -200,3 +200,30 @@ def user_register():
     }
     c.register_user(register_data)
     return make_response (jsonify({"message": 'User registered successfully'}), 201)
+
+@app.route('/api/v1/auth/register', methods=['POST'])
+def register_admin():
+    """method implementing register admin endpoint"""
+    username = request.json['username']
+    password = request.json['password']
+    role = request.json['role']
+
+    valid_name = validator.validate_input_str(username)
+    valid_role = validator.validate_input_str(role)
+    valid_pass = validator.validate_password(password)
+    if valid_name:
+        return valid_name
+    if valid_role:
+        return valid_role
+    check_name = c.check_username(username)
+    if check_name:
+        return make_response(jsonify({"message": "username already taken"}), 400)
+    if valid_pass:
+        return valid_pass
+    admin_data = {
+        "username": username,
+        "password": password,
+        "role": role
+    }
+    c.add_admin(admin_data)
+    return make_response (jsonify({"message": 'Admin successfully registered'}))
