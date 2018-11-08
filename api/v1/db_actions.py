@@ -81,6 +81,17 @@ class Sales:
 class Users:
     """Class handling all db actions on users"""
 
+    def add_admin(self, data):
+        """method to add an admin user"""
+        query = "INSERT INTO users(username, password, role) VALUES(\
+        '{}', '{}', 'admin')".format(data["username"], \
+        generate_password_hash(data["password"]))
+        cursor.execute(query)
+        return_id = "SELECT user_id, username, role FROM users WHERE username = '{}'".format(data["username"])
+        dictcur.execute(return_id)
+        data = dictcur.fetchall()
+        return data
+
     def register_user(self, data):
         """method to register a new user"""
         query = "INSERT INTO users(username, password, role) \
