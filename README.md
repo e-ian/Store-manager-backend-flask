@@ -1,5 +1,7 @@
 # Store-manager-2
 
+[![Build Status](https://travis-ci.org/e-ian/Store-manager-2.svg?branch=ch_test_api_161636847)](https://travis-ci.org/e-ian/Store-manager-2)
+
 Store Manager is a web application that helps store owners manage sales and product inventory
 records. This application is meant for use in a single store.
 
