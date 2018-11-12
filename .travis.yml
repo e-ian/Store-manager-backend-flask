@@ -3,6 +3,13 @@ language: python
 python:
   - "3.6"
 
+services:
+- postgresql
+
+env:
+  global:
+    - Testingenv = "EnvTests"
+
 install:
   - pip install -r requirements.txt
   - pip install coverage
@@ -10,6 +17,7 @@ install:
   - pip install pytest
 
 before_script:
+  - psql -c 'create database storemanagerdb;' -U postgres
   - psql -c 'create database testdb;' -U postgres
 
 script:
