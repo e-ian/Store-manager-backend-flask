@@ -2,7 +2,6 @@ import unittest
 from api.v1 import app
 from tests import(create_admin, create_attendant, create_product, create_sale, \
 login_admin, login_attendant, invalid_input_signup, empty_login, empty_signup)
-from api.v1 import views
 from api.v1.db_actions import Products, Sales
 import json
 from config import Testingconfig
@@ -17,9 +16,6 @@ class TestUser(unittest.TestCase):
 
         self.client = app.test_client()
         self.db = Datastore()
-        db.create_products_table()
-        db.create_sales_table()
-        db.create_user_table()
 
     def tearDown(self):
         self.db.cur.execute("DROP TABLE users CASCADE")
@@ -37,10 +33,13 @@ class TestUser(unittest.TestCase):
         return response
 
     def signin_admin(self, login_admin):
+        self.client.post("/api/v1/auth/admin", \
+        data = json.dumps(create_admin), content_type = 'application/json')
         response = self.client.post("/api/v1/auth/login",\
         data = json.dumps(login_admin), content_type = 'application/json')
         message = json.loads(response.data.decode())
-        return message['access_token']
+        print(message)
+        return message["access_token"]
 
     def signin_attendant(self, login_attendant):
         response = self.client.post("/api/v1/auth/login",\
@@ -48,7 +47,8 @@ class TestUser(unittest.TestCase):
         token = json.loads(response.data.decode())
         return token['access_token']
 
-    def add_a_product(self, create_product):
-        response = self.client.post("/api/v1/products", data=json.dumps(create_product), headers={'Authorization':'Bearer '+ token['access_token'], \
+    def add_a_product(self, create_product):        
+        response = self.client.post("/api/v1/products", data=json.dumps(create_product), \
+        headers={'Authorization':'Bearer '+ str(self.signin_admin(login_admin)), \
         'content_type' : 'application/json'})
         return response
