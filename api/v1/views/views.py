@@ -177,10 +177,9 @@ def user_register():
     if current_user['role'] != 'admin':
         return make_response(jsonify({'message': "Unauthorised access"}), 401)
    
-    username = request.json['username']
-    password = request.json['password']
-    role = request.json['role']
-
+    username = request.get_json('username')
+    password = request.get_json('password')
+    role = request.get_json('role')
     valid_username = validator.validate_input_str(username)
     valid_role = validator.validate_input_str(role)
     valid_password = validator.validate_password(password) 

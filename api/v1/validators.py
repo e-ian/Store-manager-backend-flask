@@ -39,7 +39,7 @@ class Validate:
     @staticmethod
     def validate_input_str(input_str):
         """method to validate if input is string"""
-        if re.search(r'\s', input_str):
+        if re.search(r'\s', str(input_str)):
             return jsonify({'error': "input field cannot have empty spaces"}), 400
         if re.search(r'\d', input_str):
             return jsonify({'error': "input field shouldnot have digits but letters"}), 400

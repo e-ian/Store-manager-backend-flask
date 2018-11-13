@@ -6,6 +6,7 @@ from api.v1.db_actions import Products, Sales
 import json
 from config import Testingconfig
 from api.v1.models import Datastore
+import re
 
 app.config.from_object(Testingconfig)
 
@@ -27,28 +28,44 @@ class TestUser(unittest.TestCase):
         data = json.dumps(create_admin), content_type = 'application/json')
         return response
 
-    def signup_user(self, register_user):
-        response = self.client.post("/api/v1/auth/signup", \
-        data = json.dumps(register_user), content_type = 'application/json')
-        return response
-
     def signin_admin(self, login_admin):
-        self.client.post("/api/v1/auth/admin", \
-        data = json.dumps(create_admin), content_type = 'application/json')
+        self.register_admin(create_admin)
         response = self.client.post("/api/v1/auth/login",\
         data = json.dumps(login_admin), content_type = 'application/json')
         message = json.loads(response.data.decode())
-        print(message)
+        # print(message)
         return message["access_token"]
 
+    def signup_user(self, create_attendant):
+        self.signin_admin(login_admin)
+        response = self.client.post("/api/v1/auth/signup", \
+        data = json.dumps(create_attendant), headers={"Authorization":"Bearer "+ str(self.signin_admin(login_admin)), \
+        'content_type' : 'application/json'})
+        return response
+
     def signin_attendant(self, login_attendant):
+        # self.signup_user(create_attendant)
+        response = self.client.post("/api/v1/auth/admin", \
+        data = json.dumps(create_admin), content_type = 'application/json')
+        response = self.client.post("/api/v1/auth/login", \
+        data = json.dumps(login_admin), content_type = "application/json")
+        response = self.client.post("/api/v1/auth/signup", \
+        data = json.dumps(create_attendant), headers={'Authorization':'Bearer '+ str(self.signin_admin(login_admin)), \
+        'content_type' : 'application/json'})
         response = self.client.post("/api/v1/auth/login",\
         data = json.dumps(login_attendant), content_type = 'application/json')
         token = json.loads(response.data.decode())
-        return token['access_token']
+        print(token)
+        return token["access_token"]
 
     def add_a_product(self, create_product):        
         response = self.client.post("/api/v1/products", data=json.dumps(create_product), \
         headers={'Authorization':'Bearer '+ str(self.signin_admin(login_admin)), \
+        'content_type' : 'application/json'})
+        return response
+
+    def add_a_sale(self, create_sale):
+        response = self.client.post("/api/v1/sales", data=json.dumps(create_sale), \
+        headers={'Authorization':'Bearer '+ str(self.signin_attendant(login_attendant)), \
         'content_type' : 'application/json'})
         return response

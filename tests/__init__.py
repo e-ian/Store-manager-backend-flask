@@ -29,7 +29,10 @@ login_admin = {
     "username": "ogwal",
     "password": "qwerty"
 }
-login_attendant = {"username": "emma", "password": "qwerty123"}
+login_attendant = {
+    "username": "emma",
+    "password": "qwerty123"
+}
 
 invalid_input_signup = {
     "username" : "*gwal#",
