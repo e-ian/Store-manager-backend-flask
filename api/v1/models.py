@@ -8,7 +8,7 @@ class Datastore(object):
         """constructor method for connecting to the database""" 
         if os.getenv("Testingenv") == "EnvTests":
             dbname = "testdb"
-        else:
+        else: 
             dbname = "storemanagerdb"
         self.conn = psycopg2.connect(dbname=dbname, user="postgres", host="localhost", password="alimanu", port="5432")
         self.conn.autocommit = True
@@ -18,8 +18,7 @@ class Datastore(object):
         self.create_products_table()
         self.create_sales_table()
 
-        print (dbname)
-            
+        print (dbname)            
 
     def create_user_table(self):
         """method creates table in database for users"""
@@ -45,7 +44,6 @@ class Datastore(object):
 
     def drop_tables(self):
         """drops/ deletes tables"""
-
         drop_user_table = "DROP TABLE users cascade;"
         drop_products_table = "DROP TABLE products cascade;"
         drop_sales_table = "DROP TABLE sales order cascade;"
